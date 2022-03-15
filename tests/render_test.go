@@ -2,9 +2,9 @@ package tests
 
 import (
 	"bytes"
-	"reflect"
 	"testing"
 
+	approvals "github.com/approvals/go-approval-tests"
 	"github.com/patrickquigley102/quigleyblog"
 )
 
@@ -16,7 +16,6 @@ func TestRender(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
-		want    string
 		wantErr bool
 	}{
 		{
@@ -30,7 +29,6 @@ func TestRender(t *testing.T) {
 					Body:        "Body\n",
 				},
 			},
-			"<h1>1</h1>\n\n<p>A</p>\n\nTags: <ul><li>a</li><li>b</li></ul>\n",
 			false,
 		},
 	}
@@ -40,10 +38,7 @@ func TestRender(t *testing.T) {
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Render() error = %v, wantErr %v", err, tt.wantErr)
 			}
-			got := tt.args.w.String()
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Render() = %v, want %v", got, tt.want)
-			}
+			approvals.VerifyString(t, tt.args.w.String())
 		})
 	}
 }
