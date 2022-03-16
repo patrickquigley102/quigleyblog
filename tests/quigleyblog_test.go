@@ -9,10 +9,12 @@ import (
 	"testing/fstest"
 
 	approvals "github.com/approvals/go-approval-tests"
+	"github.com/approvals/go-approval-tests/reporters"
 	"github.com/patrickquigley102/quigleyblog"
 )
 
 func TestMain(m *testing.M) {
+	approvals.UseReporter(reporters.NewRealDiffReporter())
 	approvals.UseFolder("approval-tests")
 	os.Exit(m.Run())
 }
