@@ -67,3 +67,19 @@ func (w errWriter) Write(p []byte) (int, error) {
 func (w *errWriter) String() string {
 	return ""
 }
+
+func BenchmarkRender(b *testing.B) {
+	var (
+		aPost = quigleyblog.Post{
+			Title:       "1",
+			Description: "A",
+			Tags:        []string{"a", "b"},
+			Body:        "Body\n",
+		}
+	)
+
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		quigleyblog.Render(io.Discard, aPost)
+	}
+}
