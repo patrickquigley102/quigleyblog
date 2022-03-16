@@ -3,12 +3,19 @@ package tests
 import (
 	"errors"
 	"io/fs"
+	"os"
 	"reflect"
 	"testing"
 	"testing/fstest"
 
+	approvals "github.com/approvals/go-approval-tests"
 	"github.com/patrickquigley102/quigleyblog"
 )
+
+func TestMain(m *testing.M) {
+	approvals.UseFolder("approval-tests")
+	os.Exit(m.Run())
+}
 
 func TestNewPostsFromFS(t *testing.T) {
 	type args struct {
