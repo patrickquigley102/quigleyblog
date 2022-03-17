@@ -1,4 +1,4 @@
-package tests
+package quigleyblog
 
 import (
 	"errors"
@@ -10,7 +10,6 @@ import (
 
 	approvals "github.com/approvals/go-approval-tests"
 	"github.com/approvals/go-approval-tests/reporters"
-	"github.com/patrickquigley102/quigleyblog"
 )
 
 func TestMain(m *testing.M) {
@@ -26,7 +25,7 @@ func TestNewPostsFromFS(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
-		want    []quigleyblog.Post
+		want    []Post
 		wantErr bool
 	}{
 		{
@@ -45,7 +44,7 @@ func TestNewPostsFromFS(t *testing.T) {
 					},
 				},
 			},
-			[]quigleyblog.Post{
+			[]Post{
 				{
 					Title:       "1",
 					Description: "A",
@@ -70,7 +69,7 @@ func TestNewPostsFromFS(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := quigleyblog.NewPostsFromFS(tt.args.fileSystem)
+			got, err := NewPostsFromFS(tt.args.fileSystem)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("NewPostsFromFS() error = %v, wantErr %v", err, tt.wantErr)
 				return
