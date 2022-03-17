@@ -19,13 +19,13 @@
 </nav>
 <main>
 
-<h1>1</h1>
-
-<p>A</p>
-
-Tags: <ul><li>a</li><li>b</li></ul>
-Body
-
+<ol>
+  
+    <li><a href="/post/1">1</a></li>
+  
+    <li><a href="/post/2">2</a></li>
+  
+</ol>
 
 </main>
 <footer>

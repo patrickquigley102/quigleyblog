@@ -6,6 +6,12 @@ import (
 	"io"
 )
 
+const (
+	templatesRegex = "templates/*.tmpl"
+	postTemplate   = "post.tmpl"
+	indexTemplate  = "index.tmpl"
+)
+
 var (
 	//go:embed "templates/*"
 	// PostTemplates are the HTML templates
@@ -19,7 +25,7 @@ type PostRenderer struct {
 
 // NewPostRenderer returns a pointer to a PostRenderer
 func NewPostRenderer() (*PostRenderer, error) {
-	template, err := template.ParseFS(PostTemplates, "templates/*.tmpl")
+	template, err := template.ParseFS(PostTemplates, templatesRegex)
 	if err != nil {
 		return nil, err
 	}
@@ -27,9 +33,18 @@ func NewPostRenderer() (*PostRenderer, error) {
 	return &PostRenderer{Template: template}, nil
 }
 
-// Render converts Post to html and writes it.
-func (r *PostRenderer) Render(w io.Writer, p Post) error {
-	err := r.Template.Execute(w, p)
+// RenderPost converts Post to html and writes it.
+func (r *PostRenderer) RenderPost(w io.Writer, p Post) error {
+	err := r.Template.ExecuteTemplate(w, postTemplate, p)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// RenderIndex renders the html of an index of Posts
+func (r *PostRenderer) RenderIndex(w io.Writer, posts []Post) error {
+	err := r.Template.ExecuteTemplate(w, indexTemplate, posts)
 	if err != nil {
 		return err
 	}

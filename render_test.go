@@ -36,8 +36,41 @@ func TestNewPostRenderer(t *testing.T) {
 		})
 	}
 }
+func TestPostRenderer_RenderIndex(t *testing.T) {
+	type args struct {
+		w     testWriter
+		posts []Post
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			"simple posts",
+			args{
+				w:     &bytes.Buffer{},
+				posts: []Post{{Title: "1"}, {Title: "2"}},
+			},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			r := &PostRenderer{
+				Template: templ,
+			}
+			err := r.RenderIndex(tt.args.w, tt.args.posts)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("PostRenderer.RenderIndex() e=%v, wantE %v", err, tt.wantErr)
+				return
+			}
+			approvals.VerifyString(t, tt.args.w.String())
+		})
+	}
+}
 
-func TestPostRenderer_Render(t *testing.T) {
+func TestPostRenderer_RenderPost(t *testing.T) {
 	type args struct {
 		w testWriter
 		p Post
@@ -74,9 +107,9 @@ func TestPostRenderer_Render(t *testing.T) {
 			r := &PostRenderer{
 				Template: templ,
 			}
-			err := r.Render(tt.args.w, tt.args.p)
+			err := r.RenderPost(tt.args.w, tt.args.p)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("PostRenderer.Render() error=%v, wantErr %v", err, tt.wantErr)
+				t.Errorf("PostRenderer.RenderPost() e=%v, wantE %v", err, tt.wantErr)
 				return
 			}
 			approvals.VerifyString(t, tt.args.w.String())
@@ -84,7 +117,7 @@ func TestPostRenderer_Render(t *testing.T) {
 	}
 }
 
-func BenchmarkRender(b *testing.B) {
+func BenchmarkRenderPost(b *testing.B) {
 	var (
 		aPost = Post{
 			Title:       "1",
@@ -99,7 +132,7 @@ func BenchmarkRender(b *testing.B) {
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		r.Render(io.Discard, aPost)
+		r.RenderPost(io.Discard, aPost)
 	}
 }
 
