@@ -54,6 +54,14 @@ func TestPostRenderer_RenderIndex(t *testing.T) {
 			},
 			false,
 		},
+		{
+			"title needs santising",
+			args{
+				w:     &bytes.Buffer{},
+				posts: []Post{{Title: "Has Space"}},
+			},
+			false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

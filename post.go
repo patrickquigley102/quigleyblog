@@ -41,6 +41,13 @@ func readBody(scanner *bufio.Scanner) string {
 	return buffer.String()
 }
 
+// SanitizedTitle returns a URL friendly title.
+func (p Post) SanitizedTitle() string {
+	return strings.ToLower(
+		strings.Replace(p.Title, " ", "-", -1),
+	)
+}
+
 // Post is a single blog post
 type Post struct {
 	Title, Description, Body string
